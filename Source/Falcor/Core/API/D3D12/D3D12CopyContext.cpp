@@ -208,6 +208,7 @@ namespace Falcor
         barrier.Transition.StateBefore = getD3D12ResourceState(pResource->getGlobalState());
         barrier.Transition.StateAfter = getD3D12ResourceState(newState);
         barrier.Transition.Subresource = subresourceIndex;
+<<<<<<< HEAD:Source/Falcor/Core/API/D3D12/D3D12CopyContext.cpp
 
         // Check that resource has required bind flags for before/after state to be supported
         D3D12_RESOURCE_STATES beforeOrAfterState = barrier.Transition.StateBefore | barrier.Transition.StateAfter;
@@ -226,6 +227,8 @@ namespace Falcor
             assert(is_set(pResource->getBindFlags(), Resource::BindFlags::UnorderedAccess));
         }
 
+=======
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/D3D12/D3D12CopyContext.cpp
         pCmdList->ResourceBarrier(1, &barrier);
     }
 
@@ -264,14 +267,14 @@ namespace Falcor
 
     void CopyContext::uavBarrier(const Resource* pResource)
     {
+        // If the resource is a buffer with CPU access, no need to do anything
+        const Buffer* pBuffer = dynamic_cast<const Buffer*>(pResource);
+        if (pBuffer && pBuffer->getCpuAccess() != Buffer::CpuAccess::None) return;
+
         D3D12_RESOURCE_BARRIER barrier;
         barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;
         barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
         barrier.UAV.pResource = pResource->getApiHandle();
-
-        // Check that resource has required bind flags for UAV barrier to be supported
-        static const Resource::BindFlags reqFlags = Resource::BindFlags::UnorderedAccess | Resource::BindFlags::AccelerationStructure;
-        assert(is_set(pResource->getBindFlags(), reqFlags));
         mpLowLevelData->getCommandList()->ResourceBarrier(1, &barrier);
         mCommandsPending = true;
     }

@@ -29,6 +29,7 @@
 #include <map>
 #include <initializer_list>
 
+<<<<<<< HEAD:Source/Falcor/Core/API/Shader.h
 struct ISlangBlob;
 
 namespace Falcor
@@ -129,6 +130,10 @@ namespace Falcor
         T* mpObject;
     };
 
+=======
+namespace Falcor
+{
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/Shader.h
     /** Low-level shader object
         This class abstracts the API's shader creation and management
     */
@@ -139,7 +144,18 @@ namespace Falcor
         using SharedConstPtr = std::shared_ptr<const Shader>;
         using ApiHandle = ShaderHandle;
 
-        typedef ComPtr<ISlangBlob> Blob;
+        struct Blob
+        {
+            enum class Type
+            {
+                Undefined,
+                String,
+                Bytecode
+            };
+            std::vector<uint8_t> data;
+            Type type = Type::Undefined;
+            std::string shaderModel;
+        };
 
         enum class CompilerFlags
         {
@@ -206,8 +222,10 @@ namespace Falcor
         */
         const std::string& getEntryPoint() const { return mEntryPointName; }
 
+
 #ifdef FALCOR_D3D12
         ID3DBlobPtr getD3DBlob() const;
+        virtual ID3DBlobPtr compile(const Blob& blob, const std::string&  entryPointName, CompilerFlags flags, std::string& errorLog);
 #endif
 
     protected:

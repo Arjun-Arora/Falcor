@@ -29,7 +29,11 @@
     <ProjectGuid>{71B60B71-89A2-4196-BFB9-4A848CF6C541}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DXRT</RootNamespace>
+<<<<<<< HEAD:Source/Samples/HelloDXR/HelloDXR.vcxproj
     <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+=======
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Samples/Raytracing/HelloDXR/HelloDXR.vcxproj
     <ProjectName>HelloDXR</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

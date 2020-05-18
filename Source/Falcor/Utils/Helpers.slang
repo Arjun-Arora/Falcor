@@ -200,19 +200,22 @@ float2 calcMotionVector(float2 pixelCrd, float4 prevPosH, float2 renderTargetDim
 /*******************************************************************
                     Alpha test
 *******************************************************************/
-// Evaluate alpha test and return true if point should be discarded
-bool evalBasicAlphaTest(float alpha, float threshold)
+void basicAlphaTest(float alpha, float threshold)
 {
-    return alpha < threshold;
+#ifndef _MS_DISABLE_ALPHA_TEST
+    if(alpha < threshold) discard;
+#endif
 }
+
 /*******************************************************************
                     Hashed Alpha Test
 *******************************************************************/
-// Evaluate alpha test and return true if point should be discarded
-bool evalHashedAlphaTest(float alpha, float materialThreshold, float hashedThreshold)
+void hashedAlphaTest(float alpha, float materialThreshold, float hashedThreshold)
 {
     float compareTo = hashedThreshold <= 0 ? materialThreshold : saturate(hashedThreshold);
-    return alpha < compareTo;
+#ifndef _MS_DISABLE_ALPHA_TEST
+    if(alpha < compareTo) discard;
+#endif
 }
 
 float sineHash(float2 p)
@@ -293,14 +296,19 @@ float calculateHashedAlpha(float3 hashInputCoord, float hashScale, bool useAniso
 
 /*******************************************************************
     Alpha test
+<<<<<<< HEAD:Source/Falcor/Utils/Helpers.slang
 *******************************************************************/
 
 /** Evaluates alpha test, returning true if pixel should be discarded.
     \todo calculateHashedAlpha requires ddx/ddy, so cannot be used in RT mode.
 */
 bool evalAlphaTest(uint matFlags, float alpha, float threshold, float3 posW)
+=======
+*******************************************************************/    
+void alphaTest(uint matFlags, float alpha, float threshold, float3 posW)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/ShadingUtils/Helpers.slang
 {
-    if (EXTRACT_ALPHA_MODE(matFlags) != AlphaModeMask) return false;
+    if(EXTRACT_ALPHA_MODE(matFlags) != AlphaModeMask) return;
 
     float hashedAlphaScale = 1.0f;
 #ifdef _HASHED_ALPHA_SCALE
@@ -309,14 +317,18 @@ bool evalAlphaTest(uint matFlags, float alpha, float threshold, float3 posW)
 
     /* Evaluate alpha test material modifier */
 #ifdef _DEFAULT_ALPHA_TEST
-    return evalBasicAlphaTest(alpha, threshold);
+    basicAlphaTest(alpha, threshold);
 #elif defined(_HASHED_ALPHA_TEST_ANISOTROPIC)
     float hashedThreshold = calculateHashedAlpha(posW, hashedAlphaScale, true);
-    return evalHashedAlphaTest(alpha, threshold, hashedThreshold);
+    hashedAlphaTest(alpha, threshold, hashedThreshold);
 #else
     // Default to isotropic hashed alpha test
     float hashedThreshold = calculateHashedAlpha(posW, hashedAlphaScale, false);
+<<<<<<< HEAD:Source/Falcor/Utils/Helpers.slang
     return evalHashedAlphaTest(alpha, threshold, hashedThreshold);
+=======
+    hashedAlphaTest(alpha, threshold, hashedThreshold);
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/ShadingUtils/Helpers.slang
 #endif
 }
 

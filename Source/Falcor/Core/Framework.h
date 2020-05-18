@@ -26,6 +26,7 @@
  # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **************************************************************************/
 #pragma once
+<<<<<<< HEAD:Source/Falcor/Core/Framework.h
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #define _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
 
@@ -57,6 +58,17 @@
 #include "Utils/Logger.h"
 #include "Utils/Math/Vector.h"
 
+=======
+#include "FalcorConfig.h"
+#include <stdint.h>
+#include <memory>
+#include "glm/glm.hpp"
+#include <iostream>
+#include "Utils/Logger.h"
+
+using namespace glm;
+
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Framework.h
 #ifndef arraysize
 #define arraysize(a) (sizeof(a)/sizeof(a[0]))
 #endif
@@ -99,6 +111,15 @@
 #define concat_strings_(a, b) a##b
 #define concat_strings(a, b) concat_strings_(a, b)
 
+#if defined(_MSC_VER)
+#define FALCOR_DEPRECATED(MESSAGE) __declspec(deprecated(MESSAGE))
+#define forceinline __forceinline
+#else
+// TODO: add cases for clang/gcc when/if needed
+#define FALCOR_DEPRECATED(MESSAGE) /* emtpy */
+#define forceinline __attribute__((always_inline))
+#endif
+
 namespace Falcor
 {
 #define enum_class_operators(e_) inline e_ operator& (e_ a, e_ b){return static_cast<e_>(static_cast<int>(a)& static_cast<int>(b));}  \
@@ -124,7 +145,7 @@ namespace Falcor
         Domain,         ///< Domain shader (AKA Tessellation evaluation shader)
         Compute,        ///< Compute shader
 
-#ifdef FALCOR_D3D12
+#ifdef FALCOR_DXR
         RayGeneration,  ///< Ray generation shader
         Intersection,   ///< Intersection shader
         AnyHit,         ///< Any hit shader
@@ -161,6 +182,7 @@ namespace Falcor
 
     enum_class_operators(FboAttachmentType);
 
+<<<<<<< HEAD:Source/Falcor/Core/Framework.h
 
     enum class ComparisonFunc
     {
@@ -185,6 +207,8 @@ namespace Falcor
 
     enum_class_operators(HotReloadFlags);
 
+=======
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Framework.h
     /** Clamps a value within a range.
         \param[in] val Value to clamp
         \param[in] minVal Low end to clamp to
@@ -248,6 +272,10 @@ namespace Falcor
     };
 }
 
+#ifdef FALCOR_DXR
+#define FALCOR_D3D12
+#endif
+
 #if defined(FALCOR_D3D12)
 #include "Core/API/D3D12/FalcorD3D12.h"
 #elif defined(FALCOR_VK)
@@ -278,7 +306,7 @@ namespace Falcor
             return "geometry";
         case ShaderType::Compute:
             return "compute";
-#ifdef FALCOR_D3D12
+#ifdef FALCOR_DXR
         case ShaderType::RayGeneration:
             return "raygeneration";
         case ShaderType::Intersection:
@@ -297,6 +325,7 @@ namespace Falcor
             return "";
         }
     }
+<<<<<<< HEAD:Source/Falcor/Core/Framework.h
 
 
 #define compare_str(a) case ComparisonFunc::a: return #a
@@ -371,6 +400,12 @@ using DllHandle = void*;
 #include "Core/Platform/OS.h"
 #include "Utils/Timing/Profiler.h"
 #include "Utils/Scripting/Scripting.h"
+=======
+}
+
+#include "Utils/Platform/OS.h"
+#include "Utils/Profiler.h"
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Framework.h
 
 #if (_ENABLE_NVAPI == true)
 #include "nvapi.h"

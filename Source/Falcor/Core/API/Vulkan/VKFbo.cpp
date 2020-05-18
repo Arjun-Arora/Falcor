@@ -37,10 +37,7 @@ namespace Falcor
         mColorAttachments.resize(getMaxColorTargetCount());
     }
 
-    Fbo::~Fbo()
-    {
-        gpDevice->releaseResource(std::static_pointer_cast<VkBaseApiHandle>(mApiHandle));
-    }
+    Fbo::~Fbo() = default;
 
     const Fbo::ApiHandle& Fbo::getApiHandle() const
     {
@@ -55,8 +52,13 @@ namespace Falcor
 
     void Fbo::initApiHandle() const
     {
-        // Bind the color buffers
+        // Render Pass
+        RenderPassCreateInfo renderPassInfo;
+        initVkRenderPassInfo(*mpDesc, renderPassInfo);
+        VkRenderPass pass;
+        vkCreateRenderPass(gpDevice->getApiHandle(), &renderPassInfo.info, nullptr, &pass);
         uint32_t arraySize = -1;
+        // FBO handle
         std::vector<VkImageView> attachments(Fbo::getMaxColorTargetCount() + 1); // 1 if for the depth
         uint32_t rtCount = 0;
         for (uint32_t i = 0; i < Fbo::getMaxColorTargetCount(); i++)
@@ -70,7 +72,6 @@ namespace Falcor
             }
         }
 
-        // Bind the depth buffer
         if(mDepthStencil.pTexture)
         {
             assert(arraySize == -1 || arraySize == getDepthStencilView()->getViewInfo().arraySize);
@@ -79,26 +80,17 @@ namespace Falcor
             rtCount++;
         }
 
-        // Render Pass
-        RenderPassCreateInfo renderPassInfo;
-        initVkRenderPassInfo(*mpDesc, renderPassInfo);
-        VkRenderPass pass;
-        vkCreateRenderPass(gpDevice->getApiHandle(), &renderPassInfo.info, nullptr, &pass);
-
-        // Framebuffer
         VkFramebufferCreateInfo frameBufferInfo = {};
         frameBufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
         frameBufferInfo.renderPass = pass;
         frameBufferInfo.attachmentCount = rtCount;
         frameBufferInfo.pAttachments = attachments.data();
-        frameBufferInfo.width = rtCount ? getWidth() : 1;
-        frameBufferInfo.height = rtCount ? getHeight() : 1;
-        frameBufferInfo.layers = rtCount ? arraySize : 1;
+        frameBufferInfo.width = getWidth();
+        frameBufferInfo.height = getHeight();
+        frameBufferInfo.layers = arraySize;
 
         VkFramebuffer frameBuffer;
         vkCreateFramebuffer(gpDevice->getApiHandle(), &frameBufferInfo, nullptr, &frameBuffer);
-
-        if (mApiHandle) gpDevice->releaseResource(std::static_pointer_cast<VkBaseApiHandle>(mApiHandle));
         mApiHandle = ApiHandle::create(pass, frameBuffer);
     }
 

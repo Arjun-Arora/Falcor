@@ -64,6 +64,7 @@ namespace Falcor
 
     HRESULT RtVarsCmdList::QueryInterface(REFIID riid, void **ppvObject)
     {
+<<<<<<< HEAD:Source/Falcor/Raytracing/RtProgramVarsHelper.cpp
         if (riid == __uuidof(ID3D12CommandList))
         {
             *ppvObject = dynamic_cast<ID3D12CommandList*>(this);
@@ -99,6 +100,9 @@ namespace Falcor
             *ppvObject = nullptr;
             return E_NOINTERFACE;
         }
+=======
+        return gpDevice->getRenderContext()->getLowLevelData()->getCommandList()->QueryInterface(riid, ppvObject);
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Raytracing/RtProgramVarsHelper.cpp
     }
 
     void RtVarsCmdList::SetGraphicsRootDescriptorTable(UINT RootParameterIndex, D3D12_GPU_DESCRIPTOR_HANDLE BaseDescriptor)

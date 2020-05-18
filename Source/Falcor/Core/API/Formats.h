@@ -145,9 +145,7 @@ namespace Falcor
         BC6HS16,
         BC6HU16,
         BC7Unorm,
-        BC7UnormSrgb,
-
-        Count
+        BC7UnormSrgb
     };
     
     /** Falcor format Type

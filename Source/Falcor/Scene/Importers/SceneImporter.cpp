@@ -1,4 +1,5 @@
 /***************************************************************************
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
  # Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
  #
  # Redistribution and use in source and binary forms, with or without
@@ -26,6 +27,38 @@
  # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **************************************************************************/
 #include "stdafx.h"
+=======
+# Copyright (c) 2015, NVIDIA CORPORATION. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#  * Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#  * Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#  * Neither the name of NVIDIA CORPORATION nor the names of its
+#    contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
+# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+# OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+***************************************************************************/
+#include "glm/detail/func_trigonometric.hpp"
+#include "glm/gtx/euler_angles.hpp"
+
+#include "Framework.h"
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
 #include "SceneImporter.h"
 #include "rapidjson/document.h"
 #include "rapidjson/error/en.h"
@@ -171,20 +204,20 @@ namespace Falcor
     template<uint32_t VecSize>
     bool SceneImporterImpl::getFloatVec(const rapidjson::Value& jsonVal, const std::string& desc, float vec[VecSize])
     {
-        if (jsonVal.IsArray() == false)
+        if(jsonVal.IsArray() == false)
         {
             error("Trying to load a vector for " + desc + ", but JValue is not an array");
             return false;
         }
 
-        if (jsonVal.Size() != VecSize)
+        if(jsonVal.Size() != VecSize)
         {
             return error("Trying to load a vector for " + desc + ", but vector size mismatches. Required size is " + std::to_string(VecSize) + ", array size is " + std::to_string(jsonVal.Size()));
         }
 
-        for (uint32_t i = 0; i < jsonVal.Size(); i++)
+        for(uint32_t i = 0; i < jsonVal.Size(); i++)
         {
-            if (jsonVal[i].IsNumber() == false)
+            if(jsonVal[i].IsNumber() == false)
             {
                 return error("Trying to load a vector for " + desc + ", but one the elements is not a number.");
             }
@@ -225,17 +258,24 @@ namespace Falcor
 
         std::vector<ModelInstance> instances;
 
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
         if (jsonVal.IsArray() == false)
+=======
+    bool SceneImporter::createModelInstances(const rapidjson::Value& jsonVal, const Model::SharedPtr& pModel)
+    {
+        if(jsonVal.IsArray() == false)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
         {
             logError("Model instances should be an array of objects");
             return {};
         }
 
-        for (uint32_t i = 0; i < jsonVal.Size(); i++)
+        for(uint32_t i = 0; i < jsonVal.Size(); i++)
         {
             const auto& jsonInstance = jsonVal[i];
             ModelInstance instance;
 
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
             for (auto m = jsonInstance.MemberBegin(); m < jsonInstance.MemberEnd(); m++)
             {
                 std::string key(m->name.GetString());
@@ -245,6 +285,36 @@ namespace Falcor
                 else if (key == SceneKeys::kRotationVec)
                 {
                     if (getFloatVec<3>(m->value, "Model instance rotation vector", &instance.rotation[0]))
+=======
+            for(auto m = instance.MemberBegin(); m < instance.MemberEnd(); m++)
+            {
+                std::string key(m->name.GetString());
+                if(key == SceneKeys::kName)
+                {
+                    if(m->value.IsString() == false)
+                    {
+                        return error("Model instance name should be a string value.");
+                    }
+                    name = std::string(m->value.GetString());
+                }
+                else if(key == SceneKeys::kTranslationVec)
+                {
+                    if(getFloatVec<3>(m->value, "Model instance translation vector", &translation[0]) == false)
+                    {
+                        return false;
+                    }
+                }
+                else if(key == SceneKeys::kScalingVec)
+                {
+                    if(getFloatVec<3>(m->value, "Model instance scale vector", &scaling[0]) == false)
+                    {
+                        return false;
+                    }
+                }
+                else if(key == SceneKeys::kRotationVec)
+                {
+                    if(getFloatVec<3>(m->value, "Model instance rotation vector", &rotation[0]) == false)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
                     {
                         instance.rotation = glm::radians(instance.rotation);
                     }
@@ -271,14 +341,14 @@ namespace Falcor
     bool SceneImporterImpl::createModel(const rapidjson::Value& jsonModel)
     {
         // Model must have at least a filename
-        if (jsonModel.HasMember(SceneKeys::kFilename) == false)
+        if(jsonModel.HasMember(SceneKeys::kFilename) == false)
         {
             return error("Model must have a filename");
         }
 
         // Get Model name
         const auto& modelFile = jsonModel[SceneKeys::kFilename];
-        if (modelFile.IsString() == false)
+        if(modelFile.IsString() == false)
         {
             return error("Model filename must be a string");
         }
@@ -319,29 +389,50 @@ namespace Falcor
             }
         }
 
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
         std::vector<glm::mat4> instances;
+=======
+        // Load the model
+        auto pModel = Model::createFromFile(file.c_str(), modelFlags);
+        if(pModel == nullptr)
+        {
+            return error("Could not load model: " + file);
+        }
+
+        bool instanceAdded = false;
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
 
         // Loop over the other members
-        for (auto jval = jsonModel.MemberBegin(); jval != jsonModel.MemberEnd(); jval++)
+        for(auto jval = jsonModel.MemberBegin(); jval != jsonModel.MemberEnd(); jval++)
         {
             std::string keyName(jval->name.GetString());
-            if (keyName == SceneKeys::kFilename)
+            if(keyName == SceneKeys::kFilename)
             {
                 // Already handled
             }
-            else if (keyName == SceneKeys::kName)
+            else if(keyName == SceneKeys::kName)
             {
-                if (jval->value.IsString() == false)
+                if(jval->value.IsString() == false)
                 {
                     return error("Model name should be a string value.");
                 }
             }
-            else if (keyName == SceneKeys::kModelInstances)
+            else if(keyName == SceneKeys::kModelInstances)
             {
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
                 instances = parseModelInstances(jval->value);
+=======
+                if(createModelInstances(jval->value, pModel) == false)
+                {
+                    return false;
+                }
+
+                instanceAdded = true;
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
             }
-            else if (keyName == SceneKeys::kActiveAnimation)
+            else if(keyName == SceneKeys::kActiveAnimation)
             {
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
 // #SCENEV2
 //                 if (jval->value.IsUint() == false)
 //                 {
@@ -358,6 +449,23 @@ namespace Falcor
 //                 {
 //                     pModel->setActiveAnimation(activeAnimation);
 //                 }
+=======
+                if(jval->value.IsUint() == false)
+                {
+                    return error("Model active animation should be an unsigned integer");
+                }
+                uint32_t activeAnimation = jval->value.GetUint();
+                if(activeAnimation >= pModel->getAnimationsCount())
+                {
+                    std::string msg = "Warning when parsing scene file \"" + mFilename + "\".\nModel " + pModel->getName() + " was specified with active animation " + std::to_string(activeAnimation);
+                    msg += ", but model only has " + std::to_string(pModel->getAnimationsCount()) + " animations. Ignoring field";
+                    logWarning(msg);
+                }
+                else
+                {
+                    pModel->setActiveAnimation(activeAnimation);
+                }
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
             }
             else if (keyName == SceneKeys::kMaterial)
             {
@@ -377,15 +485,15 @@ namespace Falcor
 
     bool SceneImporterImpl::parseModels(const rapidjson::Value& jsonVal)
     {
-        if (jsonVal.IsArray() == false)
+        if(jsonVal.IsArray() == false)
         {
             return error("models section should be an array of objects.");
         }
 
         // Loop over the array
-        for (uint32_t i = 0; i < jsonVal.Size(); i++)
+        for(uint32_t i = 0; i < jsonVal.Size(); i++)
         {
-            if (createModel(jsonVal[i]) == false)
+            if(createModel(jsonVal[i]) == false)
             {
                 return false;
             }
@@ -397,40 +505,50 @@ namespace Falcor
     {
         auto pDirLight = DirectionalLight::create();
 
-        for (auto it = jsonLight.MemberBegin(); it != jsonLight.MemberEnd(); it++)
+        for(auto it = jsonLight.MemberBegin(); it != jsonLight.MemberEnd(); it++)
         {
             std::string key(it->name.GetString());
             const auto& value = it->value;
-            if (key == SceneKeys::kName)
+            if(key == SceneKeys::kName)
             {
-                if (value.IsString() == false)
+                if(value.IsString() == false)
                 {
                     return error("Directional light name should be a string");
                 }
                 std::string name = value.GetString();
-                if (name.find(' ') != std::string::npos)
+                if(name.find(' ') != std::string::npos)
                 {
                     return error("Directional light name can't have spaces");
                 }
                 pDirLight->setName(name);
             }
-            else if (key == SceneKeys::kType)
+            else if(key == SceneKeys::kType)
             {
                 // Don't care
             }
-            else if (key == SceneKeys::kLightIntensity)
+            else if(key == SceneKeys::kLightIntensity)
             {
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
                 float3 intensity;
                 if (getFloatVec<3>(value, "Directional light intensity", &intensity[0]) == false)
+=======
+                glm::vec3 intensity;
+                if(getFloatVec<3>(value, "Directional light intensity", &intensity[0]) == false)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
                 {
                     return false;
                 }
                 pDirLight->setIntensity(intensity);
             }
-            else if (key == SceneKeys::kLightDirection)
+            else if(key == SceneKeys::kLightDirection)
             {
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
                 float3 direction;
                 if (getFloatVec<3>(value, "Directional light direction", &direction[0]) == false)
+=======
+                glm::vec3 direction;
+                if(getFloatVec<3>(value, "Directional light intensity", &direction[0]) == false)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
                 {
                     return false;
                 }
@@ -450,30 +568,30 @@ namespace Falcor
     {
         auto pPointLight = PointLight::create();
 
-        for (auto it = jsonLight.MemberBegin(); it != jsonLight.MemberEnd(); it++)
+        for(auto it = jsonLight.MemberBegin(); it != jsonLight.MemberEnd(); it++)
         {
             std::string key(it->name.GetString());
             const auto& value = it->value;
-            if (key == SceneKeys::kName)
+            if(key == SceneKeys::kName)
             {
-                if (value.IsString() == false)
+                if(value.IsString() == false)
                 {
                     return error("Point light name should be a string");
                 }
                 std::string name = value.GetString();
-                if (name.find(' ') != std::string::npos)
+                if(name.find(' ') != std::string::npos)
                 {
                     return error("Point light name can't have spaces");
                 }
                 pPointLight->setName(name);
             }
-            else if (key == SceneKeys::kType)
+            else if(key == SceneKeys::kType)
             {
                 // Don't care
             }
-            else if (key == SceneKeys::kLightOpeningAngle)
+            else if(key == SceneKeys::kLightOpeningAngle)
             {
-                if (value.IsNumber() == false)
+                if(value.IsNumber() == false)
                 {
                     return error("Point light's FOV should be a number");
                 }
@@ -482,9 +600,9 @@ namespace Falcor
                 angle = glm::radians(angle);
                 pPointLight->setOpeningAngle(angle);
             }
-            else if (key == SceneKeys::kLightPenumbraAngle)
+            else if(key == SceneKeys::kLightPenumbraAngle)
             {
-                if (value.IsNumber() == false)
+                if(value.IsNumber() == false)
                 {
                     return error("Point light's FOV should be a number");
                 }
@@ -493,28 +611,43 @@ namespace Falcor
                 angle = glm::radians(angle);
                 pPointLight->setPenumbraAngle(angle);
             }
-            else if (key == SceneKeys::kLightIntensity)
+            else if(key == SceneKeys::kLightIntensity)
             {
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
                 float3 intensity;
                 if (getFloatVec<3>(value, "Point light intensity", &intensity[0]) == false)
+=======
+                glm::vec3 intensity;
+                if(getFloatVec<3>(value, "Point light intensity", &intensity[0]) == false)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
                 {
                     return false;
                 }
                 pPointLight->setIntensity(intensity);
             }
-            else if (key == SceneKeys::kLightPos)
+            else if(key == SceneKeys::kLightPos)
             {
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
                 float3 position;
                 if (getFloatVec<3>(value, "Point light position", &position[0]) == false)
+=======
+                glm::vec3 position;
+                if(getFloatVec<3>(value, "Point light position", &position[0]) == false)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
                 {
                     return false;
                 }
                 pPointLight->setWorldPosition(position);
             }
-            else if (key == SceneKeys::kLightDirection)
+            else if(key == SceneKeys::kLightDirection)
             {
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
                 float3 dir;
                 if (getFloatVec<3>(value, "Point light direction", &dir[0]) == false)
+=======
+                glm::vec3 dir;
+                if(getFloatVec<3>(value, "Point light direction", &dir[0]) == false)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
                 {
                     return false;
                 }
@@ -531,6 +664,7 @@ namespace Falcor
         return true;
     }
 
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
     // Support for analytic area lights
     bool SceneImporterImpl::createAnalyticAreaLight(const rapidjson::Value& jsonLight)
     {
@@ -623,47 +757,46 @@ namespace Falcor
     }
 
     bool SceneImporterImpl::parseLights(const rapidjson::Value& jsonVal)
+=======
+    bool SceneImporter::parseLights(const rapidjson::Value& jsonVal)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
     {
-        if (jsonVal.IsArray() == false)
+        if(jsonVal.IsArray() == false)
         {
             return error("lights section should be an array of objects.");
         }
 
         // Go over all the objects
-        for (uint32_t i = 0; i < jsonVal.Size(); i++)
+        for(uint32_t i = 0; i < jsonVal.Size(); i++)
         {
             const auto& light = jsonVal[i];
             const auto& type = light.FindMember(SceneKeys::kType);
-            if (type == light.MemberEnd())
+            if(type == light.MemberEnd())
             {
                 return error("Light source must have a type.");
             }
 
-            if (type->value.IsString() == false)
+            if(type->value.IsString() == false)
             {
                 return error("Light source Type must be a string.");
             }
 
             std::string lightType(type->value.GetString());
             bool b;
-            if (lightType == SceneKeys::kDirLight)
+            if(lightType == SceneKeys::kDirLight)
             {
                 b = createDirLight(light);
             }
-            else if (lightType == SceneKeys::kPointLight)
+            else if(lightType == SceneKeys::kPointLight)
             {
                 b = createPointLight(light);
-            }
-            else if (lightType == SceneKeys::kAreaLightRect || lightType == SceneKeys::kAreaLightSphere || lightType == SceneKeys::kAreaLightDisc)
-            {
-                b = createAnalyticAreaLight(light);
             }
             else
             {
                 return error("Unrecognized light Type \"" + lightType + "\"");
             }
 
-            if (b == false)
+            if(b == false)
             {
                 return false;
             }
@@ -758,13 +891,131 @@ namespace Falcor
         return true;
     }
 
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
     bool SceneImporterImpl::parsePaths(const rapidjson::Value& jsonVal)
+=======
+    bool SceneImporter::createPathFrames(ObjectPath* pPath, const rapidjson::Value& jsonFramesArray)
     {
-        if (jsonVal.IsArray() == false)
+        // an array of key frames
+        if(jsonFramesArray.IsArray() == false)
+        {
+            return error("Camera path frames should be an array of key-frame objects");
+        }
+
+        for(uint32_t i = 0; i < jsonFramesArray.Size(); i++)
+        {
+            float time = 0;
+            glm::vec3 pos, target, up;
+            for(auto it = jsonFramesArray[i].MemberBegin(); it < jsonFramesArray[i].MemberEnd(); it++)
+            {
+                std::string key(it->name.GetString());
+                auto& value = it->value;
+                bool b = true;
+                if(key == SceneKeys::kFrameTime)
+                {
+                    if(value.IsNumber() == false)
+                    {
+                        error("Camera path time should be a number");
+                        b = false;
+                    }
+
+                    time = (float)value.GetDouble();
+                }
+                else if(key == SceneKeys::kCamPosition)
+                {
+                    b = getFloatVec<3>(value, "Camera path position", &pos[0]);
+                }
+                else if(key == SceneKeys::kCamTarget)
+                {
+                    b = getFloatVec<3>(value, "Camera path target", &target[0]);
+                }
+                else if(key == SceneKeys::kCamUp)
+                {
+                    b = getFloatVec<3>(value, "Camera path up vector", &up[0]);
+                }
+
+                if(b == false)
+                {
+                    return false;
+                }
+            }
+            pPath->addKeyFrame(time, pos, target, up);
+        }
+        return true;
+    }
+
+    ObjectPath::SharedPtr SceneImporter::createPath(const rapidjson::Value& jsonPath)
+    {
+        auto pPath = ObjectPath::create();
+
+        for(auto it = jsonPath.MemberBegin(); it != jsonPath.MemberEnd(); it++)
+        {
+            const std::string key(it->name.GetString());
+            const auto& value = it->value;
+
+            if(key == SceneKeys::kName)
+            {
+                if(value.IsString() == false)
+                {
+                    error("Path name should be a string");
+                    return nullptr;
+                }
+
+                std::string pathName(value.GetString());
+                pPath->setName(pathName);
+            }
+            else if(key == SceneKeys::kPathLoop)
+            {
+                if(value.IsBool() == false)
+                {
+                    error("Path loop should be a boolean value");
+                    return nullptr;
+                }
+
+                bool b = value.GetBool();
+                pPath->setAnimationRepeat(b);
+            }
+            else if(key == SceneKeys::kPathFrames)
+            {
+                if(createPathFrames(pPath.get(), value) == false)
+                {
+                    return nullptr;
+                }
+            }
+            else if (key == SceneKeys::kAttachedObjects)
+            {
+                if (value.IsArray() == false)
+                {
+                    error("Path object list should be an array");
+                    return nullptr;
+                }
+
+                for (uint32_t i = 0; i < value.Size(); i++)
+                {
+                    std::string type = value[i].FindMember(SceneKeys::kType)->value.GetString();
+                    std::string name = value[i].FindMember(SceneKeys::kName)->value.GetString();
+
+                    pPath->attachObject(getMovableObject(type, name));
+                }
+            }
+            else
+            {
+                error("Unknown token \"" + key + "\" when parsing camera path");
+                return nullptr;
+            }
+        }
+        return pPath;
+    }
+
+    bool SceneImporter::parsePaths(const rapidjson::Value& jsonVal)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
+    {
+        if(jsonVal.IsArray() == false)
         {
             return error("Paths should be an array");
         }
 
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
         logWarning("fscene paths are deprecated, please use Maya or other DCC tools to create a path directly in the model file");
         return true;
     }
@@ -773,6 +1024,49 @@ namespace Falcor
     {
         logWarning("fscene paths are deprecated, please use Maya or other DCC tools to create a path directly in the model file");
         return true;
+=======
+        for(uint32_t PathID = 0; PathID < jsonVal.Size(); PathID++)
+        {
+            auto pPath = createPath(jsonVal[PathID]);
+            if(pPath)
+            {
+                mScene.addPath(pPath);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+        
+    bool SceneImporter::parseActivePath(const rapidjson::Value& jsonVal)
+    {
+        if (mScene.getVersion() != 1)
+        {
+            return true;
+        }
+
+        // Paths should already be initialized at this stage
+        if(jsonVal.IsString() == false)
+        {
+            return error("Active path should be a string.");
+        }
+
+        std::string activePath = jsonVal.GetString();
+
+        // Find the path
+        for(uint32_t i = 0; i < mScene.getPathCount(); i++)
+        {
+            if(activePath == mScene.getPath(i)->getName())
+            {
+                mScene.getPath(i)->attachObject(mScene.getActiveCamera());
+                return true;
+            }
+        }
+
+        return error("Active path \"" + activePath + "\" not found." );
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
     }
 
     bool SceneImporterImpl::parseCamera(const rapidjson::Value& jsonCamera)
@@ -781,19 +1075,20 @@ namespace Falcor
         std::string activePath;
 
         // Go over all the keys
-        for (auto it = jsonCamera.MemberBegin(); it != jsonCamera.MemberEnd(); it++)
+        for(auto it = jsonCamera.MemberBegin(); it != jsonCamera.MemberEnd(); it++)
         {
             std::string key(it->name.GetString());
             const auto& value = it->value;
-            if (key == SceneKeys::kName)
+            if(key == SceneKeys::kName)
             {
                 // Name
-                if (value.IsString() == false)
+                if(value.IsString() == false)
                 {
                     return error("Camera name should be a string value");
                 }
                 pCamera->setName(value.GetString());
             }
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
             else if (key == SceneKeys::kCamSpeed)
             {
                 if (value.IsNumber() == false)
@@ -808,29 +1103,64 @@ namespace Falcor
             {
                 float3 pos;
                 if (getFloatVec<3>(value, "Camera's position", &pos[0]) == false)
+=======
+            else if(key == SceneKeys::kCamPosition)
+            {
+                glm::vec3 pos;
+                if(getFloatVec<3>(value, "Camera's position", &pos[0]) == false)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
                 {
                     return false;
                 }
                 pCamera->setPosition(pos);
             }
-            else if (key == SceneKeys::kCamTarget)
+            else if(key == SceneKeys::kCamTarget)
             {
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
                 float3 target;
                 if (getFloatVec<3>(value, "Camera's target", &target[0]) == false)
+=======
+                glm::vec3 target;
+                if(getFloatVec<3>(value, "Camera's target", &target[0]) == false)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
                 {
                     return false;
                 }
                 pCamera->setTarget(target);
             }
-            else if (key == SceneKeys::kCamUp)
+            else if(key == SceneKeys::kCamUp)
             {
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
                 float3 up;
                 if (getFloatVec<3>(value, "Camera's up vector", &up[0]) == false)
+=======
+                glm::vec3 up;
+                if(getFloatVec<3>(value, "Camera's up vector", &up[0]) == false)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
                 {
                     return false;
                 }
                 pCamera->setUpVector(up);
             }
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
+=======
+            else if(key == SceneKeys::kCamFovY) // Version 1
+            {
+                if (mScene.getVersion() > 1)
+                {
+                    return error("Camera FOV is only valid in scene version 1. Ignoring value.");
+                }
+
+                if(value.IsNumber() == false)
+                {
+                    return error("Camera's FOV should be a number");
+                }
+
+                // Convert to radians
+                float fovY = glm::radians((float)value.GetDouble());
+                pCamera->setFocalLength(fovYToFocalLength(fovY, Camera::kDefaultFrameHeight));
+            }
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
             else if (key == SceneKeys::kCamFocalLength) // Version 2
             {
                 if (value.IsNumber() == false)
@@ -840,18 +1170,18 @@ namespace Falcor
 
                 pCamera->setFocalLength((float)value.GetDouble());
             }
-            else if (key == SceneKeys::kCamDepthRange)
+            else if(key == SceneKeys::kCamDepthRange)
             {
                 float depthRange[2];
-                if (getFloatVec<2>(value, "Camera's depth-range", depthRange) == false)
+                if(getFloatVec<2>(value, "Camera's depth-range", depthRange) == false)
                 {
                     return false;
                 }
                 pCamera->setDepthRange(depthRange[0], depthRange[1]);
             }
-            else if (key == SceneKeys::kCamAspectRatio)
+            else if(key == SceneKeys::kCamAspectRatio)
             {
-                if (value.IsNumber() == false)
+                if(value.IsNumber() == false)
                 {
                     return error("Camera's aspect ratio should be a number");
                 }
@@ -885,13 +1215,24 @@ namespace Falcor
 
     bool SceneImporterImpl::parseCameras(const rapidjson::Value& jsonVal)
     {
-        if (jsonVal.IsArray() == false)
+        if(jsonVal.IsArray() == false)
         {
             return error("Cameras section should be an array. If you want to use a single camera you can rename the section to `camera`");
         }
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
         if(jsonVal.Size() > 1)
         {
             logWarning("The scene file contains multiple cameras. The first camera in the array will be used");
+=======
+
+        // Go over all the objects
+        for(uint32_t i = 0; i < jsonVal.Size(); i++)
+        {
+            if(createCamera(jsonVal[i]) == false)
+            {
+                return false;
+            }
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
         }
         return parseCamera(jsonVal[0]);
     }
@@ -901,10 +1242,13 @@ namespace Falcor
         std::string fullpath;
         mFilename = filename;
 
-        if (findFileInDataDirectories(filename, fullpath))
+        if(findFileInDataDirectories(filename, fullpath))
         {
             // Load the file
-            std::string jsonData = readFile(fullpath);
+            std::ifstream fileStream(fullpath);
+            std::stringstream strStream;
+            strStream << fileStream.rdbuf();
+            std::string jsonData = strStream.str();
             rapidjson::StringStream JStream(jsonData.c_str());
 
             // Get the file directory
@@ -914,18 +1258,26 @@ namespace Falcor
             // create the DOM
             mJDoc.ParseStream(JStream);
 
-            if (mJDoc.HasParseError())
+            if(mJDoc.HasParseError())
             {
                 size_t line;
                 line = std::count(jsonData.begin(), jsonData.begin() + mJDoc.GetErrorOffset(), '\n');
                 return error(std::string("JSON Parse error in line ") + std::to_string(line) + ". " + rapidjson::GetParseError_En(mJDoc.GetParseError()));
             }
 
-            if (topLevelLoop() == false)
+            if(topLevelLoop() == false)
             {
                 return false;
             }
 
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
+=======
+            if(is_set(mSceneLoadFlags, Scene::LoadFlags::GenerateAreaLights))
+            {
+                mScene.createAreaLights();
+            }
+
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
             return true;
         }
         else
@@ -942,7 +1294,7 @@ namespace Falcor
 
     bool SceneImporterImpl::parseLightingScale(const rapidjson::Value& jsonVal)
     {
-        if (jsonVal.IsNumber() == false)
+        if(jsonVal.IsNumber() == false)
         {
             return error("Lighting scale should be a number.");
         }
@@ -953,7 +1305,7 @@ namespace Falcor
 
     bool SceneImporterImpl::parseCameraSpeed(const rapidjson::Value& jsonVal)
     {
-        if (jsonVal.IsNumber() == false)
+        if(jsonVal.IsNumber() == false)
         {
             return error("Camera speed should be a number.");
         }
@@ -965,9 +1317,29 @@ namespace Falcor
 
     bool SceneImporterImpl::parseActiveCamera(const rapidjson::Value& jsonVal)
     {
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
         logWarning(SceneKeys::kActiveCamera + std::string(" is not supported anymore. Using the first camera found"));
         return true;
     }
+=======
+        // Cameras should already be initialized at this stage
+        if(jsonVal.IsString() == false)
+        {
+            return error("Active camera should be a string.");
+        }
+
+        std::string activeCamera = jsonVal.GetString();
+
+        // Find the camera
+        for(uint32_t i = 0; i < mScene.getCameraCount(); i++)
+        {
+            if(activeCamera == mScene.getCamera(i)->getName())
+            {
+                mScene.setActiveCamera(i);
+                return true;
+            }
+        }
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
 
     bool SceneImporterImpl::parseVersion(const rapidjson::Value& jsonVal)
     {
@@ -977,7 +1349,11 @@ namespace Falcor
 
     bool SceneImporterImpl::parseSceneUnit(const rapidjson::Value& jsonVal)
     {
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
         if (jsonVal.IsNumber() == false)
+=======
+        if(jsonVal.IsUint() == false)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
         {
             return error("Scene unit should be a number.");
         }
@@ -986,6 +1362,7 @@ namespace Falcor
         return true;
     }
 
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
     bool SceneImporterImpl::parseEnvMap(const rapidjson::Value& jsonVal)
     {
         if (jsonVal.IsString() == false)
@@ -1008,13 +1385,106 @@ namespace Falcor
     }
 
     bool SceneImporterImpl::parseUserDefinedSection(const rapidjson::Value& jsonVal)
+=======
+    bool SceneImporter::parseUserDefinedSection(const rapidjson::Value& jsonVal)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
     {
-        if (jsonVal.IsObject() == false)
+        if(jsonVal.IsObject() == false)
         {
             return error("User defined section should be a JSON object.");
         }
 
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
         logWarning("User defined section is no longer supported");
+=======
+        for(auto it = jsonVal.MemberBegin(); it != jsonVal.MemberEnd(); it++)
+        {
+            bool b;
+            Scene::UserVariable userVar;
+            std::string name(it->name.GetString());
+            const auto& value = it->value;
+            // Check if this is a vector
+            if(value.IsArray())
+            {
+                for(uint32_t i = 0; i < value.Size(); i++)
+                {
+                    if(value[i].IsNumber() == false)
+                    {
+                        return error("User defined section contains an array, but some of the elements are not numbers.");
+                    }
+                }
+
+                switch(value.Size())
+                {
+                case 2:
+                    userVar.type = Scene::UserVariable::Type::Vec2;
+                    b = getFloatVec<2>(value, "custom-field vec2", &userVar.vec2[0]);
+                    break;
+                case 3:
+                    userVar.type = Scene::UserVariable::Type::Vec3;
+                    b = getFloatVec<3>(value, "custom-field vec3", &userVar.vec3[0]);
+                    break;
+                case 4:
+                    userVar.type = Scene::UserVariable::Type::Vec4;
+                    b = getFloatVec<4>(value, "custom-field vec4", &userVar.vec4[0]);
+                    break;
+                default:
+                    userVar.type = Scene::UserVariable::Type::Vector;
+                    b = getFloatVecAnySize(value, "vector of floats", userVar.vector);
+                    break;
+                }
+                if(b == false)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                // Not an array. Must be a literal
+                // The way rapidjson works, a uint is also an int, and a 32-bit number is also a 64-bit number, so the order in which we check the Type matters
+                if(value.IsUint())
+                {
+                    userVar.type = Scene::UserVariable::Type::Uint;
+                    userVar.u32 = value.GetUint();
+                }
+                else if(value.IsInt())
+                {
+                    userVar.type = Scene::UserVariable::Type::Int;
+                    userVar.i32 = value.GetInt();
+                }
+                else if(value.IsUint64())
+                {
+                    userVar.type = Scene::UserVariable::Type::Uint64;
+                    userVar.u64 = value.GetUint64();
+                }
+                else if(value.IsInt64())
+                {
+                    userVar.type = Scene::UserVariable::Type::Int64;
+                    userVar.i64 = value.GetInt64();
+                }
+                else if(value.IsDouble())
+                {
+                    userVar.type = Scene::UserVariable::Type::Double;
+                    userVar.d64 = value.GetDouble();
+                }
+                else if(value.IsString())
+                {
+                    userVar.type = Scene::UserVariable::Type::String;
+                    userVar.str = value.GetString();
+                }
+                else if(value.IsBool())
+                {
+                    userVar.type = Scene::UserVariable::Type::Bool;
+                    userVar.b = value.GetBool();
+                }
+                else
+                {
+                    return error("Error when parsing custom-field \"" + name + "\". Field Type invalid. Must be a literal number, string boolean or an array of 2/3/4 numbers.");
+                }
+            }
+            mScene.addUserVariable(name, userVar);
+        }
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
         return true;
     }
 
@@ -1022,33 +1492,46 @@ namespace Falcor
     {
         // Find the file
         std::string fullpath = mDirectory + '/' + include;
-        if (doesFileExist(fullpath) == false)
+        if(doesFileExist(fullpath) == false)
         {
             // Look in the data directories
-            if (findFileInDataDirectories(include, fullpath) == false)
+            if(findFileInDataDirectories(include, fullpath) == false)
             {
                 return error("Can't find include file " + include);
             }
         }
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
         return load(fullpath);
+=======
+
+        Scene::SharedPtr pScene = Scene::create();
+        SceneImporter::loadScene(*pScene, fullpath, mModelLoadFlags, mSceneLoadFlags);
+        if(pScene == nullptr)
+        {
+            return false;
+        }
+        mScene.merge(pScene.get());
+
+        return true;
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
     }
 
     bool SceneImporterImpl::parseIncludes(const rapidjson::Value& jsonVal)
     {
-        if (jsonVal.IsArray() == false)
+        if(jsonVal.IsArray() == false)
         {
             return error("Include section should be an array of strings");
         }
 
-        for (uint32_t i = 0; i < jsonVal.Size(); i++)
+        for(uint32_t i = 0; i < jsonVal.Size(); i++)
         {
-            if (jsonVal[i].IsString() == false)
+            if(jsonVal[i].IsString() == false)
             {
                 return error("Include element should be a string");
             }
 
             const std::string include = jsonVal[i].GetString();
-            if (loadIncludeFile(include) == false)
+            if(loadIncludeFile(include) == false)
             {
                 return false;
             }
@@ -1059,6 +1542,7 @@ namespace Falcor
     const SceneImporterImpl::FuncValue SceneImporterImpl::kFunctionTable[] =
     {
         // The order matters here.
+<<<<<<< HEAD:Source/Falcor/Scene/Importers/SceneImporter.cpp
         {SceneKeys::kVersion, &SceneImporterImpl::parseVersion},
         {SceneKeys::kSceneUnit, &SceneImporterImpl::parseSceneUnit},
         {SceneKeys::kEnvMap, &SceneImporterImpl::parseEnvMap},
@@ -1077,27 +1561,44 @@ namespace Falcor
         {SceneKeys::kPaths, &SceneImporterImpl::parsePaths},
         {SceneKeys::kActivePath, &SceneImporterImpl::parseActivePath}, // Should come after ParsePaths
         {SceneKeys::kInclude, &SceneImporterImpl::parseIncludes}
+=======
+        {SceneKeys::kVersion, &SceneImporter::parseVersion},
+        {SceneKeys::kAmbientIntensity, &SceneImporter::parseAmbientIntensity},
+        {SceneKeys::kLightingScale, &SceneImporter::parseLightingScale},
+        {SceneKeys::kCameraSpeed, &SceneImporter::parseCameraSpeed},
+
+        {SceneKeys::kModels, &SceneImporter::parseModels},
+        {SceneKeys::kLights, &SceneImporter::parseLights},
+        {SceneKeys::kLightProbes, &SceneImporter::parseLightProbes},
+        {SceneKeys::kCameras, &SceneImporter::parseCameras},
+        {SceneKeys::kActiveCamera, &SceneImporter::parseActiveCamera},  // Should come after ParseCameras
+        {SceneKeys::kUserDefined, &SceneImporter::parseUserDefinedSection},
+
+        {SceneKeys::kPaths, &SceneImporter::parsePaths},
+        {SceneKeys::kActivePath, &SceneImporter::parseActivePath}, // Should come after ParsePaths
+        {SceneKeys::kInclude, &SceneImporter::parseIncludes}
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Scene/SceneImporter.cpp
     };
 
     bool SceneImporterImpl::validateSceneFile()
     {
         // Make sure the top-level is valid
-        for (auto it = mJDoc.MemberBegin(); it != mJDoc.MemberEnd(); it++)
+        for(auto it = mJDoc.MemberBegin(); it != mJDoc.MemberEnd(); it++)
         {
             bool found = false;
             const std::string name(it->name.GetString());
 
-            for (uint32_t i = 0; i < arraysize(kFunctionTable); i++)
+            for(uint32_t i = 0; i < arraysize(kFunctionTable); i++)
             {
                 // Check that we support this value
-                if (kFunctionTable[i].token == name)
+                if(kFunctionTable[i].token == name)
                 {
                     found = true;
                     break;
                 }
             }
 
-            if (found == false)
+            if(found == false)
             {
                 return error("Invalid key found in top-level object. Key == " + std::string(it->name.GetString()) + ".");
             }
@@ -1107,18 +1608,18 @@ namespace Falcor
 
     bool SceneImporterImpl::topLevelLoop()
     {
-        if (validateSceneFile() == false)
+        if(validateSceneFile() == false)
         {
             return false;
         }
 
-        for (uint32_t i = 0; i < arraysize(kFunctionTable); i++)
+        for(uint32_t i = 0; i < arraysize(kFunctionTable); i++)
         {
             const auto& jsonMember = mJDoc.FindMember(kFunctionTable[i].token.c_str());
-            if (jsonMember != mJDoc.MemberEnd())
+            if(jsonMember != mJDoc.MemberEnd())
             {
                 auto a = kFunctionTable[i].func;
-                if ((this->*a)(jsonMember->value) == false)
+                if((this->*a)(jsonMember->value) == false)
                 {
                     return false;
                 }

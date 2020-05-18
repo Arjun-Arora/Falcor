@@ -27,8 +27,18 @@
  **************************************************************************/
 #pragma once
 #define NOMINMAX
+<<<<<<< HEAD:Source/Falcor/Core/API/D3D12/FalcorD3D12.h
 #include <d3d12.h>
 #include "Core/API/Formats.h"
+=======
+#ifdef FALCOR_DXR
+#include "../../../Externals/DXR/include/d3d12_1.h"
+#else
+#include <d3d12.h>
+#endif
+#include <d3dcompiler.h>
+#include "API/Formats.h"
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/D3D12/FalcorD3D12.h
 #include <comdef.h>
 #include <dxgi1_4.h>
 #include <dxgiformat.h>
@@ -39,8 +49,12 @@ __forceinline BOOL dxBool(bool b) { return b ? TRUE : FALSE; }
 
 #define d3d_call(a) {HRESULT hr_ = a; if(FAILED(hr_)) { d3dTraceHR( #a, hr_); }}
 
+<<<<<<< HEAD:Source/Falcor/Core/API/D3D12/FalcorD3D12.h
 #define GET_COM_INTERFACE(base, type, var) MAKE_SMART_COM_PTR(type); concat_strings(type, Ptr) var; d3d_call(base->QueryInterface(IID_PPV_ARGS(&var)));
 
+=======
+#pragma comment(lib, "d3dcompiler.lib")
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/D3D12/FalcorD3D12.h
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d12.lib")
 
@@ -124,6 +138,7 @@ namespace Falcor
         return std::string(infoLog.data());
     }
 
+<<<<<<< HEAD:Source/Falcor/Core/API/D3D12/FalcorD3D12.h
     enum class RtBuildFlags
     {
         None = 0,
@@ -180,15 +195,19 @@ namespace Falcor
     MAKE_SMART_COM_PTR(ID3DBlob);
 
     MAKE_SMART_COM_PTR(ID3D12StateObject);
+=======
+    // Device
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/D3D12/FalcorD3D12.h
     MAKE_SMART_COM_PTR(ID3D12Device);
-    MAKE_SMART_COM_PTR(ID3D12GraphicsCommandList);
     MAKE_SMART_COM_PTR(ID3D12Debug);
     MAKE_SMART_COM_PTR(ID3D12CommandQueue);
     MAKE_SMART_COM_PTR(ID3D12CommandAllocator);
+    MAKE_SMART_COM_PTR(ID3D12GraphicsCommandList);
     MAKE_SMART_COM_PTR(ID3D12DescriptorHeap);
     MAKE_SMART_COM_PTR(ID3D12Resource);
     MAKE_SMART_COM_PTR(ID3D12Fence);
     MAKE_SMART_COM_PTR(ID3D12PipelineState);
+    MAKE_SMART_COM_PTR(ID3D12ShaderReflection);
     MAKE_SMART_COM_PTR(ID3D12RootSignature);
     MAKE_SMART_COM_PTR(ID3D12QueryHeap);
     MAKE_SMART_COM_PTR(ID3D12CommandSignature);
@@ -201,10 +220,17 @@ namespace Falcor
 
     class DescriptorHeapEntry;
 
+<<<<<<< HEAD:Source/Falcor/Core/API/D3D12/FalcorD3D12.h
     using WindowHandle = HWND;
     using DeviceHandle = ID3D12DevicePtr;
     using CommandListHandle = ID3D12GraphicsCommandListPtr;
     using CommandQueueHandle = ID3D12CommandQueuePtr;
+=======
+	using WindowHandle = HWND;
+	using DeviceHandle = ID3D12DevicePtr;
+	using CommandListHandle = ID3D12GraphicsCommandListPtr;
+	using CommandQueueHandle = ID3D12CommandQueuePtr;
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/D3D12/FalcorD3D12.h
     using ApiCommandQueueType = D3D12_COMMAND_LIST_TYPE;
     using CommandAllocatorHandle = ID3D12CommandAllocatorPtr;
     using CommandSignatureHandle = ID3D12CommandSignaturePtr;
@@ -246,3 +272,10 @@ namespace Falcor
 }
 
 #define UNSUPPORTED_IN_D3D12(msg_) {Falcor::logWarning(msg_ + std::string(" is not supported in D3D12. Ignoring call."));}
+<<<<<<< HEAD:Source/Falcor/Core/API/D3D12/FalcorD3D12.h
+=======
+
+#ifdef FALCOR_DXR
+#include "../../Raytracing/DXR.h"
+#endif
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/D3D12/FalcorD3D12.h

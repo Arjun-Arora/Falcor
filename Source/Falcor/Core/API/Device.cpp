@@ -30,11 +30,16 @@
 
 namespace Falcor
 {
+<<<<<<< HEAD:Source/Falcor/Core/API/Device.cpp
     void createNullViews();
     void releaseNullViews();
 
     Device::SharedPtr gpDevice;
 
+=======
+    Device::SharedPtr gpDevice;
+    
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/Device.cpp
     Device::SharedPtr Device::create(Window::SharedPtr& pWindow, const Device::Desc& desc)
     {
         if (gpDevice)
@@ -148,11 +153,6 @@ namespace Falcor
                 mDeferredReleases.push({ mpFrameFence->getCpuValue(), pResource });
             }
         }
-    }
-
-    bool Device::isFeatureSupported(SupportedFeatures flags) const
-    {
-        return is_set(mSupportedFeatures, flags);
     }
 
     void Device::executeDeferredReleases()

@@ -72,14 +72,6 @@ namespace Falcor
 #endif
         };
 
-        enum class SupportedFeatures
-        {
-            None = 0x0,
-            ProgrammableSamplePositionsPartialOnly = 0x1, // On D3D12, this means tier 1 support. Allows one sample position to be set.
-            ProgrammableSamplePositionsFull = 0x2,        // On D3D12, this means tier 2 support. Allows up to 4 sample positions to be set.
-            Raytracing = 0x4                              // On D3D12, DirectX Raytracing is supported. It is up to the user to not use raytracing functions when not supported.
-        };
-
         /** Create a new device.
             \param[in] pWindow a previously-created window object
             \param[in] desc Device configuration descriptor.
@@ -156,10 +148,15 @@ namespace Falcor
         const GpuMemoryHeap::SharedPtr& getUploadHeap() const { return mpUploadHeap; }
         void releaseResource(ApiObjectHandle pResource);
         double getGpuTimestampFrequency() const { return mGpuTimestampFrequency; } // ms/tick
+<<<<<<< HEAD:Source/Falcor/Core/API/Device.h
 
         /** Check if features are supported by the device
         */
         bool isFeatureSupported(SupportedFeatures flags) const;
+=======
+        bool isRgb32FloatSupported() const { return mRgb32FloatSupported; }
+
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/Device.h
 #ifdef FALCOR_VK
         uint32_t getVkMemoryType(GpuMemoryHeap::Type falcorType, uint32_t memoryTypeBits) const;
         const VkPhysicalDeviceLimits& getPhysicalDeviceLimits() const;
@@ -199,8 +196,6 @@ namespace Falcor
         double mGpuTimestampFrequency;
         std::vector<CommandQueueHandle> mCmdQueues[kQueueTypeCount];
 
-        SupportedFeatures mSupportedFeatures = SupportedFeatures::None;
-
         // API specific functions
         bool getApiFboData(uint32_t width, uint32_t height, ResourceFormat colorFormat, ResourceFormat depthFormat, ResourceHandle apiHandles[kSwapChainBuffersCount], uint32_t& currentBackBufferIndex);
         void destroyApiObjects();
@@ -211,7 +206,11 @@ namespace Falcor
         void toggleFullScreen(bool fullscreen);
     };
 
+<<<<<<< HEAD:Source/Falcor/Core/API/Device.h
     dlldecl extern Device::SharedPtr gpDevice;
 
     enum_class_operators(Device::SupportedFeatures);
+=======
+    extern Device::SharedPtr gpDevice;
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/Device.h
 }

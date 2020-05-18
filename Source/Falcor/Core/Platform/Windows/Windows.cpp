@@ -1,4 +1,5 @@
 /***************************************************************************
+<<<<<<< HEAD:Source/Falcor/Core/Platform/Windows/Windows.cpp
  # Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
  #
  # Redistribution and use in source and binary forms, with or without
@@ -31,6 +32,45 @@
 #include <commdlg.h>
 #include <ShlObj_core.h>
 #include <comutil.h>
+=======
+# Copyright (c) 2015, NVIDIA CORPORATION. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#  * Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#  * Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#  * Neither the name of NVIDIA CORPORATION nor the names of its
+#    contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
+# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+# OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+***************************************************************************/
+
+#include "Framework.h"
+#include "Utils/Platform/OS.h"
+#include <vector>
+#include <stdint.h>
+#include "Utils/StringUtils.h"
+#include <Shlwapi.h>
+#include <shlobj.h>
+#include <sys/types.h>
+#include "API/Window.h"
+#include "psapi.h"
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Utils/Platform/Windows/Windows.cpp
 
 // Always run in Optimus mode on laptops
 extern "C"
@@ -197,12 +237,6 @@ namespace Falcor
         DWORD res = CreateDirectoryA(path.c_str(), NULL);
 
         return res == TRUE;
-    }
-
-    std::string getTempFilename()
-    {
-        char* error = nullptr;
-        return std::tmpnam(error);
     }
 
     const std::string& getExecutableDirectory()
@@ -403,42 +437,6 @@ namespace Falcor
         return int((hPixelsPerInch + vPixelsPerInch) * 0.5);
     }
 
-    float getDisplayScaleFactor()
-    {
-        float dpi = (float)getDisplayDpi();
-        float scale = dpi / 96.0f;
-        return scale;
-
-        ::SetProcessDPIAware();
-        DEVICE_SCALE_FACTOR factor;
-        if (GetScaleFactorForMonitor(nullptr, &factor) == S_OK)
-        {
-            switch (factor)
-            {
-            case SCALE_100_PERCENT: return 1.0f;
-            case SCALE_120_PERCENT: return 1.2f;
-            case SCALE_125_PERCENT: return 1.25f;
-            case SCALE_140_PERCENT: return 1.40f;
-            case SCALE_150_PERCENT: return 1.50f;
-            case SCALE_160_PERCENT: return 1.60f;
-            case SCALE_175_PERCENT: return 1.70f;
-            case SCALE_180_PERCENT: return 1.80f;
-            case SCALE_200_PERCENT: return 2.00f;
-            case SCALE_225_PERCENT: return 2.25f;
-            case SCALE_250_PERCENT: return 2.50f;
-            case SCALE_300_PERCENT: return 3.00f;
-            case SCALE_350_PERCENT: return 3.50f;
-            case SCALE_400_PERCENT: return 4.00f;
-            case SCALE_450_PERCENT: return 4.50f;
-            case SCALE_500_PERCENT: return 4.60f;
-            default:
-                should_not_get_here();
-                return 1.0f;
-            }
-        }
-        return 1.0f;
-    }
-
     bool isDebuggerPresent()
     {
         return ::IsDebuggerPresent() == TRUE;
@@ -454,6 +452,7 @@ namespace Falcor
         __debugbreak();
     }
 
+<<<<<<< HEAD:Source/Falcor/Core/Platform/Windows/Windows.cpp
     size_t executeProcess(const std::string& appName, const std::string& commandLineArgs)
     {
         std::string commandLine = appName + ".exe " + commandLineArgs;
@@ -583,6 +582,8 @@ namespace Falcor
         }
     }
 
+=======
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Utils/Platform/Windows/Windows.cpp
     void enumerateFiles(std::string searchString, std::vector<std::string>& filenames)
     {
         WIN32_FIND_DATAA ffd;
@@ -710,6 +711,7 @@ namespace Falcor
     {
         return __popcnt(a);
     }
+<<<<<<< HEAD:Source/Falcor/Core/Platform/Windows/Windows.cpp
 
 
     DllHandle loadDll(const std::string& libPath)
@@ -745,4 +747,6 @@ namespace Falcor
     {
         CoUninitialize();
     }
+=======
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Utils/Platform/Windows/Windows.cpp
 }

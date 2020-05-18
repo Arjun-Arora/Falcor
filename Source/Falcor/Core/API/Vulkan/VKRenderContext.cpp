@@ -190,6 +190,7 @@ namespace Falcor
                 if (applyGraphicsVars() == false) return; // Skip the call
             }
         }
+
         if (is_set(RenderContext::StateBindFlags::PipelineState, mBindFlags))
         {
             GraphicsStateObject::SharedPtr pGSO = mpGraphicsState->getGSO(mpGraphicsVars.get());
@@ -198,13 +199,6 @@ namespace Falcor
         if (is_set(RenderContext::StateBindFlags::Fbo, mBindFlags))
         {
             transitionFboResources(this, mpGraphicsState->getFbo().get());
-        }
-        if (is_set(StateBindFlags::SamplePositions, mBindFlags))
-        {
-            if (mpGraphicsState->getFbo() && mpGraphicsState->getFbo()->getSamplePositions().size())
-            {
-                logWarning("The Vulkan backend doesn't support programmable sample positions");
-            }
         }
         if (is_set(RenderContext::StateBindFlags::Viewports, mBindFlags))
         {

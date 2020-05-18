@@ -29,8 +29,6 @@
 
 namespace Falcor
 {
-    class Texture;
-
     /** A class representing a memory bitmap
     */
     class dlldecl Bitmap : public std::enable_shared_from_this<Bitmap>
@@ -76,12 +74,15 @@ namespace Falcor
         */
         static void saveImage(const std::string& filename, uint32_t width, uint32_t height, FileFormat fileFormat, ExportFlags exportFlags, ResourceFormat resourceFormat, bool isTopDown, void* pData);
 
+<<<<<<< HEAD:Source/Falcor/Utils/Image/Bitmap.h
         /**  Open dialog to save image to a file
             \param[in] pTexture Texture to save to file
              
         */
         static void saveImageDialog(Texture* pTexture);
 
+=======
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Utils/Bitmap.h
         ~Bitmap();
 
         /** Get a pointer to the bitmap's data store

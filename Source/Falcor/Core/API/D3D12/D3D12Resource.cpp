@@ -62,8 +62,10 @@ namespace Falcor
     {
         D3D12_RESOURCE_FLAGS d3d = D3D12_RESOURCE_FLAG_NONE;
 
-        bool uavRequired = is_set(flags, Resource::BindFlags::UnorderedAccess) || is_set(flags, Resource::BindFlags::AccelerationStructure);
-
+        bool uavRequired = is_set(flags, Resource::BindFlags::UnorderedAccess);
+#ifdef FALCOR_DXR
+        uavRequired = uavRequired || is_set(flags, Resource::BindFlags::AccelerationStructure);
+#endif
         if (uavRequired)
         {
             d3d |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
@@ -128,8 +130,10 @@ namespace Falcor
             return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
         case Resource::State::NonPixelShader:
             return D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+#ifdef FALCOR_DXR
         case Resource::State::AccelerationStructure:
             return D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE;
+#endif
         default:
             should_not_get_here();
             return D3D12_RESOURCE_STATE_GENERIC_READ;

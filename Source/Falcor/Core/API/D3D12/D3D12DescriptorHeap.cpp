@@ -33,7 +33,7 @@ namespace Falcor
 {
     D3D12DescriptorHeap::D3D12DescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, uint32_t chunkCount) : mMaxChunkCount(chunkCount), mType(type)
     {
-        DeviceHandle pDevice = gpDevice->getApiHandle();
+		ID3D12DevicePtr pDevice = gpDevice->getApiHandle();
         mDescriptorSize = pDevice->GetDescriptorHandleIncrementSize(type);
     }
 
@@ -41,8 +41,12 @@ namespace Falcor
 
     D3D12DescriptorHeap::SharedPtr D3D12DescriptorHeap::create(D3D12_DESCRIPTOR_HEAP_TYPE type, uint32_t descCount, bool shaderVisible)
     {
+<<<<<<< HEAD:Source/Falcor/Core/API/D3D12/D3D12DescriptorHeap.cpp
         assert(gpDevice);
         DeviceHandle pDevice = gpDevice->getApiHandle();
+=======
+		ID3D12DevicePtr pDevice = gpDevice->getApiHandle();
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/D3D12/LowLevel/D3D12DescriptorHeap.cpp
 
         uint32_t chunkCount = (descCount + kDescPerChunk - 1) / kDescPerChunk;
         D3D12DescriptorHeap::SharedPtr pHeap = SharedPtr(new D3D12DescriptorHeap(type, chunkCount));
@@ -116,10 +120,19 @@ namespace Falcor
         // Need a new chunk
         uint32_t chunkCount = (descCount + kDescPerChunk - 1) / kDescPerChunk;
 
+<<<<<<< HEAD:Source/Falcor/Core/API/D3D12/D3D12DescriptorHeap.cpp
         if (chunkCount == 1 && mFreeChunks.empty() == false)
         {
             mpCurrentChunk = mFreeChunks.back();
             mFreeChunks.pop_back();
+=======
+        // TODO: Optimize it for the case that chunkCount > 1 - mFreeChunks can be sorted by offset to find contiguous chunks
+        if (chunkCount == 1 && (mFreeChunks.empty() == false))
+        {
+            mpCurrentChunk = mFreeChunks.front();
+            mFreeChunks.pop();
+            mpCurrentChunk->reset();
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/D3D12/LowLevel/D3D12DescriptorHeap.cpp
             return true;
         }
         else if (chunkCount > 1 && mFreeLargeChunks.empty() == false)

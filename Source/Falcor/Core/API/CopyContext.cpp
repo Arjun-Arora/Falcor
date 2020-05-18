@@ -54,11 +54,14 @@ namespace Falcor
             mpLowLevelData->flush();
             mCommandsPending = false;
         }
+<<<<<<< HEAD:Source/Falcor/Core/API/CopyContext.cpp
         else
         {
             // We need to signal even if there are no commands to execute. We need this because some resources may have been released since the last flush(), and unless we signal they will not be released
             mpLowLevelData->getFence()->gpuSignal(mpLowLevelData->getCommandQueue());
         }
+=======
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/CopyContext.cpp
 
         bindDescriptorHeaps();
 

@@ -116,6 +116,7 @@ namespace Falcor
             uint32_t currentDesc = 0;
         };
 
+<<<<<<< HEAD:Source/Falcor/Core/API/D3D12/D3D12DescriptorHeap.h
         // Helper to compare Chunk::SharedPtr types
         struct ChunkComparator
         {
@@ -136,5 +137,11 @@ namespace Falcor
         Chunk::SharedPtr mpCurrentChunk;
         std::vector<Chunk::SharedPtr> mFreeChunks; // Free list for standard sized chunks (1 chunk * kDescPerChunk)
         std::multiset<Chunk::SharedPtr, ChunkComparator> mFreeLargeChunks; // Free list for large chunks with the capacity of multiple chunks (>1 chunk * kDescPerChunk)
+=======
+        Chunk::SharedPtr mpCurrentChunk;
+        bool setupCurrentChunk(uint32_t descCount);
+        void releaseChunk(Chunk::SharedPtr pChunk);
+        std::queue<Chunk::SharedPtr> mFreeChunks;
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/D3D12/LowLevel/D3D12DescriptorHeap.h
     };
 }

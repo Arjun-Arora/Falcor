@@ -60,7 +60,18 @@ namespace Falcor
 
         /** Comparison mode for the sampler.
         */
-        using ComparisonMode = ComparisonFunc;
+        enum class ComparisonMode
+        {
+            Disabled,           ///< No comparison. Regular filtering.
+            LessEqual,          ///< Passes if source is less than or equal to the destination
+            GreaterEqual,       ///< Passes if source is greater than or equal to the destination
+            Less,               ///< Passes if source is less than the destination
+            Greater,            ///< Passes if source is greater than to the destination
+            Equal,              ///< Passes if source is equal to the destination
+            NotEqual,           ///< Passes if source is not equal to the destination
+            Always,             ///< Comparison always passes
+            Never,              ///< Comparison always fails
+        };
 
         /** Descriptor used to create a new Sampler object
         */
@@ -190,7 +201,10 @@ namespace Falcor
         Desc mDesc;
         ApiHandle mApiHandle = {};
         static uint32_t getApiMaxAnisotropy();
+        static Sampler::SharedPtr spDefaultSampler;
+        static uint32_t sObjectCount;
     };
+<<<<<<< HEAD:Source/Falcor/Core/API/Sampler.h
 
 #define filter_str(a) case Sampler::Filter::a: return #a
     inline std::string to_string(Sampler::Filter f)
@@ -219,3 +233,6 @@ namespace Falcor
     }
 #undef address_str
 }
+=======
+}
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/Sampler.h

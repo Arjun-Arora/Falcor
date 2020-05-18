@@ -37,12 +37,19 @@ namespace Falcor
     class ProgramVars;
     class ParameterBlock;
 
+<<<<<<< HEAD:Source/Falcor/Scene/Lights/LightProbe.h
     class dlldecl LightProbe
+=======
+    class LightProbe : public IMovableObject, std::enable_shared_from_this<LightProbe>
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/LightProbe.h
     {
     public:
         using SharedPtr = std::shared_ptr<LightProbe>;
         using SharedConstPtr = std::shared_ptr<const LightProbe>;
+<<<<<<< HEAD:Source/Falcor/Scene/Lights/LightProbe.h
         using ConstSharedPtrRef = const SharedPtr&;
+=======
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/LightProbe.h
 
         static const uint32_t kDataSize = sizeof(LightProbeData) - sizeof(LightProbeResources);
         static const uint32_t kDefaultDiffSamples = 4096;

@@ -28,9 +28,17 @@
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
+<<<<<<< HEAD:Source/Samples/CudaInterop/CudaInterop.vcxproj
     <ProjectGuid>{B80C5BB4-A82E-4BAC-BF95-910AED1947AF}</ProjectGuid>
     <RootNamespace>CudaInterop</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+=======
+    <ProjectGuid>{0A6AC638-6567-49F9-B328-66BA201C74B6}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>PostProcess</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <ProjectName>HDRToneMapping</ProjectName>
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Samples/Effects/HDRToneMapping/HDRToneMapping.vcxproj
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">

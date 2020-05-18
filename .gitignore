@@ -5,14 +5,37 @@ Bin/*
 *.suo
 *.ptx
 *.pyc
+<<<<<<< HEAD
 *.VC.db
 *.VC.opendb
+=======
+Falcor.VC.db
+FalcorTest.VC.db
+Framework/BuildScripts/PatchFalcorProps/PatchFalcorPropertySheet/PatchFalcorPropertySheet.VC.db
+FalcorTest/TestResults/*
+Falcor.VC.VC.opendb
+Framework/Externals/NVAPI/
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0
 .vs/*
-.vscode/
 *.pyc
 *.o
 *slang-dump-*
+<<<<<<< HEAD
 Source/Externals/.packman/*
+=======
+
+# A bit of a song and dance to ignore all the files
+# in the Slang codebase except for the ones we need.
+Framework/Externals/slang/*
+!Framework/Externals/slang/source/
+Framework/Externals/slang/source/**/*.vcxproj
+Framework/Externals/slang/source/**/*.filters
+Framework/Externals/slang/source/**/*.natvis
+!Framework/Externals/slang/source/**/*.cpp
+!Framework/Externals/slang/source/**/*.cpp
+!Framework/Externals/slang/source/**/*.h
+Framework/Externals/
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0
 Media
 Tools/.packman
 Tests/data

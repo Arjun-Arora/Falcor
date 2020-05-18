@@ -26,9 +26,18 @@
  # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **************************************************************************/
 #pragma once
+<<<<<<< HEAD:Source/Falcor/Scene/Camera/Camera.h
 #include "CameraData.slang"
 #include "Utils/SampleGenerators/CPUSampleGenerator.h"
 #include "Core/BufferTypes/ParameterBlock.h"
+=======
+#include <glm/common.hpp>
+#include "glm/geometric.hpp"
+#include "glm/mat4x4.hpp"
+#include "Data/HostDeviceData.h"
+#include <vector>
+#include "Graphics/Paths/MovableObject.h"
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Camera/Camera.h
 
 namespace Falcor
 {
@@ -38,12 +47,19 @@ namespace Falcor
 
     /** Camera class. Default transform matrices are interpreted as left eye transform during stereo rendering.
     */
+<<<<<<< HEAD:Source/Falcor/Scene/Camera/Camera.h
     class dlldecl Camera
+=======
+    class Camera : public IMovableObject, public std::enable_shared_from_this<Camera>
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Camera/Camera.h
     {
     public:
         using SharedPtr = std::shared_ptr<Camera>;
         using SharedConstPtr = std::shared_ptr<const Camera>;
+<<<<<<< HEAD:Source/Falcor/Scene/Camera/Camera.h
         using ConstSharedPtrRef = const SharedPtr&;
+=======
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Camera/Camera.h
 
         // Default dimensions of full frame cameras and 35mm film
         static const float kDefaultFrameHeight;
@@ -161,6 +177,7 @@ namespace Falcor
         */
         float getFarPlane() const { return mData.farZ; }
 
+<<<<<<< HEAD:Source/Falcor/Scene/Camera/Camera.h
         /** Set a pattern generator. If a generator is set, then a jitter will be set every frame based on the generator
         */
         void setPatternGenerator(const CPUSampleGenerator::SharedPtr& pGenerator, const float2& scale = float2(1));
@@ -169,11 +186,13 @@ namespace Falcor
         */
         const CPUSampleGenerator::SharedPtr& getPatternGenerator() const { return mJitterPattern.pGenerator; }
 
+=======
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Camera/Camera.h
         /** Set the camera's jitter.
             \param[in] jitterX Subpixel offset along X axis divided by screen width (positive value shifts the image right).
             \param[in] jitterY Subpixel offset along Y axis divided by screen height (positive value shifts the image up).
         */
-        void setJitter(float jitterX, float jitterY);
+        void setJitter(float jitterX, float jitterY) { mData.jitterX = jitterX; mData.jitterY = jitterY; mDirty = true; }
         float getJitterX() const { return mData.jitterX; }
         float getJitterY() const { return mData.jitterY; }
 
@@ -253,7 +272,16 @@ namespace Falcor
             This is where we store the previous frame matrices.
             \param[in] firstFrame Set to true on the first frame or after switching cameras.
         */
+<<<<<<< HEAD:Source/Falcor/Scene/Camera/Camera.h
         Changes beginFrame(bool firstFrame = false);
+=======
+        static uint32_t getShaderDataSize() 
+        {
+            static const size_t dataSize = sizeof(CameraData);
+            static_assert(dataSize % sizeof(float) * 4 == 0, "Camera::CameraData size should be a multiple of 16");
+            return dataSize;
+        }
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Camera/Camera.h
 
         /** Get the camera changes that happened in since the previous frame
         */
@@ -281,6 +309,7 @@ namespace Falcor
             float negW;     ///< Camera frustum plane, sign of the coordinates
             float3 sign;    ///< Camera frustum plane position
         } mutable mFrustumPlanes[6];
+<<<<<<< HEAD:Source/Falcor/Scene/Camera/Camera.h
 
         struct
         {
@@ -289,6 +318,8 @@ namespace Falcor
         } mJitterPattern;
 
         void setJitterInternal(float jitterX, float jitterY);
+=======
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Graphics/Camera/Camera.h
     };
 
     enum_class_operators(Camera::Changes);

@@ -37,6 +37,21 @@ namespace Falcor
 
     class GpuTimer;
 
+<<<<<<< HEAD:Source/Falcor/Utils/Timing/Profiler.h
+=======
+    /** Basic wrapper to calculate and store a string's hash value.
+    */
+    struct HashedString
+    {
+        static std::hash<std::string> hashFunc;
+
+        HashedString(const std::string& s) : str(s), hash(hashFunc(s)) {}
+
+        const std::string str;
+        const size_t hash;
+    };
+
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Utils/Profiler.h
     /** Container class for CPU/GPU profiling.
         This class uses the most accurately available CPU and GPU timers to profile given events. It automatically creates event hierarchies based on the order of the calls made.
         This class uses a double-buffering scheme for GPU profiling to avoid GPU stalls.
@@ -69,13 +84,18 @@ namespace Falcor
                 size_t currentTimer = 0;
             };
             FrameData frameData[2]; // Double-buffering, to avoid GPU flushes
-            bool showInMsg;
+
             std::stack<size_t> callStack;
             CpuTimer::TimePoint cpuStart;
             CpuTimer::TimePoint cpuEnd;
+<<<<<<< HEAD:Source/Falcor/Utils/Timing/Profiler.h
             double cpuTotal = 0;
             double cpuRunningAverageMS = -1.f;   // Negative value to signify invalid
             double gpuRunningAverageMS = -1.f;
+=======
+            float cpuTotal = 0;
+            float gpuTotal = 0;
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Utils/Profiler.h
             uint32_t level;
             uint32_t triggered = 0;
             bool registered = false;
@@ -90,22 +110,40 @@ namespace Falcor
         /** Start profiling a new event and update the events hierarchies.
             \param[in] name The event name.
         */
+<<<<<<< HEAD:Source/Falcor/Utils/Timing/Profiler.h
         static void startEvent(const std::string& name, Flags flags = Flags::Default, bool showInMsg = true);
+=======
+        inline static void startEvent(const HashedString& name) { startEvent(name, getEvent(name)); }
+
+        /** Start profiling a new event and update the events hierarchies.
+            \param[in] name The event name.
+            \param[in] event The event if previously looked up.
+            \note This version supports dropping the event-lookup if the event is already available.
+        */
+        static void startEvent(const HashedString& name, EventData *pEvent);
 
         /** Finish profiling a new event and update the events hierarchies.
             \param[in] name The event name.
         */
+        inline static void endEvent(const HashedString& name) { endEvent(name, getEvent(name)); }
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Utils/Profiler.h
+
+        /** Finish profiling a new event and update the events hierarchies.
+            \param[in] name The event name.
+            \param[in] event The event if previously looked up.
+            \note This version supports dropping the event-lookup if the event is already available.
+        */
+<<<<<<< HEAD:Source/Falcor/Utils/Timing/Profiler.h
         static void endEvent(const std::string& name, Flags flags = Flags::Default);
+=======
+        static void endEvent(const HashedString& name, EventData *pEvent);
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Utils/Profiler.h
 
         /** Finish profiling for the entire frame.
             Due to the double-buffering nature of the profiler, the results returned are for the previous frame.
             \param[out] profileResults A string containing the the profiling results.
         */
-        static void endFrame();
-
-        /** Get a string with the current frame results
-        */
-        static std::string getEventsString();
+        static void endFrame(std::string& profileResults);
 
         /** Create a new event and register and initialize it using \ref initNewEvent.
             \param[in] name The event name.
@@ -124,6 +162,7 @@ namespace Falcor
         */
         static EventData* getEvent(const std::string& name);
 
+<<<<<<< HEAD:Source/Falcor/Utils/Timing/Profiler.h
         /** Get the event, or create a new one if the event does not yet exist.
         This is a public interface to facilitate more complicated construction of event names and finegrained control over the profiled region.
         */
@@ -134,6 +173,8 @@ namespace Falcor
         */
         static double getEventGpuTime(const std::string& name);
 
+=======
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Utils/Profiler.h
         /** Returns the event or \c nullptr if the event is not known.
             Can be used as a predicate.
         */
@@ -145,11 +186,16 @@ namespace Falcor
         static void clearEvents();
 
     private:
+<<<<<<< HEAD:Source/Falcor/Utils/Timing/Profiler.h
         static double getGpuTime(const EventData* pData);
         static double getCpuTime(const EventData* pData);
 
         static std::unordered_map<std::string, EventData*> sProfilerEvents;
         static std::vector<EventData*> sRegisteredEvents;
+=======
+        static std::map<size_t, EventData*> sProfilerEvents;
+        static std::vector<EventData*> sProfilerVector;
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/Utils/Profiler.h
         static uint32_t sCurrentLevel;
         static uint32_t sGpuTimerIndex;
     };

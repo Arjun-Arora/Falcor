@@ -38,6 +38,17 @@
   <ItemGroup>
     <ShaderSource Include="SkyBox.slang" />
   </ItemGroup>
+<<<<<<< HEAD:Source/RenderPasses/SkyBox/SkyBox.vcxproj
+=======
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6E7CBE80-7C06-485B-BEA7-08AEBFE53C22}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SimpleDeferred</RootNamespace>
+    <ProjectName>SimpleDeferred</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Samples/Core/SimpleDeferred/SimpleDeferred.vcxproj
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>

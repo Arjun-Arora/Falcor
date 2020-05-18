@@ -122,6 +122,7 @@ namespace Falcor
         return pSwapChain3;
     }
 
+<<<<<<< HEAD:Source/Falcor/Core/API/D3D12/D3D12Device.cpp
     DeviceHandle createDevice(IDXGIFactory4* pFactory, D3D_FEATURE_LEVEL requestedFeatureLevel, const std::vector<UUID>& experimentalFeatures)
     {
         // Feature levels to try creating devices. Listed in descending order so the highest supported level is used.
@@ -142,6 +143,14 @@ namespace Falcor
         IDXGIAdapter1Ptr pAdapter;
         DeviceHandle pDevice;
         D3D_FEATURE_LEVEL deviceFeatureLevel;
+=======
+    ID3D12DevicePtr createDevice(IDXGIFactory4* pFactory, D3D_FEATURE_LEVEL featureLevel, const std::vector<UUID>& experimentalFeatures, bool& rgb32FSupported)
+    {
+        featureLevel = D3D_FEATURE_LEVEL_11_0;
+        // Find the HW adapter
+        IDXGIAdapter1Ptr pAdapter;
+        ID3D12DevicePtr pDevice;
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/D3D12/D3D12Device.cpp
 
         // Read FALCOR_GPU_DEVICE_ID environment variable or select first GPU device
         const uint32_t selectedGpuDeviceId = ([] ()
@@ -184,6 +193,7 @@ namespace Falcor
             // Skip if vendorId doesn't match requested
             if (selectedGpuVendorId != 0 && desc.VendorId != selectedGpuVendorId) continue;
 
+<<<<<<< HEAD:Source/Falcor/Core/API/D3D12/D3D12Device.cpp
             // Skip to selected device id
             if (gpuDeviceId++ < selectedGpuDeviceId) continue;
 
@@ -191,6 +201,14 @@ namespace Falcor
             else createMaxFeatureLevel(&requestedFeatureLevel, 1);
 
             if (pDevice != nullptr)
+=======
+            // Try and create a D3D12 device
+            if (experimentalFeatures.size())
+            {
+                d3d_call(D3D12EnableExperimentalFeatures((uint32_t)experimentalFeatures.size(), experimentalFeatures.data(), nullptr, nullptr));
+            }
+            if (D3D12CreateDevice(pAdapter, featureLevel, IID_PPV_ARGS(&pDevice)) == S_OK)
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/D3D12/D3D12Device.cpp
             {
                 logInfo("Successfully created device with feature level: " + to_string(deviceFeatureLevel));
                 return pDevice;
@@ -199,36 +217,6 @@ namespace Falcor
 
         logFatal("Could not find a GPU that supports D3D12 device");
         return nullptr;
-    }
-
-    Device::SupportedFeatures getSupportedFeatures(DeviceHandle pDevice)
-    {
-        Device::SupportedFeatures supported = Device::SupportedFeatures::None;
-
-        D3D12_FEATURE_DATA_D3D12_OPTIONS2 features2;
-        HRESULT hr = pDevice->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS2, &features2, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS2));
-        if (FAILED(hr) || features2.ProgrammableSamplePositionsTier == D3D12_PROGRAMMABLE_SAMPLE_POSITIONS_TIER_NOT_SUPPORTED)
-        {
-            logInfo("Programmable sample positions is not supported on this device.");
-        }
-        else
-        {
-            if (features2.ProgrammableSamplePositionsTier == D3D12_PROGRAMMABLE_SAMPLE_POSITIONS_TIER_1) supported |= Device::SupportedFeatures::ProgrammableSamplePositionsPartialOnly;
-            else if (features2.ProgrammableSamplePositionsTier == D3D12_PROGRAMMABLE_SAMPLE_POSITIONS_TIER_2) supported |= Device::SupportedFeatures::ProgrammableSamplePositionsFull;
-        }
-
-        D3D12_FEATURE_DATA_D3D12_OPTIONS5 features5;
-        hr = pDevice->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS5, &features5, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS5));
-        if (FAILED(hr) || features5.RaytracingTier == D3D12_RAYTRACING_TIER_NOT_SUPPORTED)
-        {
-            logInfo("Raytracing is not supported on this device.");
-        }
-        else
-        {
-            supported |= Device::SupportedFeatures::Raytracing;
-        }
-
-        return supported;
     }
 
     CommandQueueHandle Device::getCommandQueueHandle(LowLevelContextData::CommandQueueType type, uint32_t index) const
@@ -310,6 +298,7 @@ namespace Falcor
         mApiHandle = createDevice(mpApiData->pDxgiFactory, getD3DFeatureLevel(mDesc.apiMajorVersion, mDesc.apiMinorVersion), mDesc.experimentalFeatures);
         if (mApiHandle == nullptr) return false;
 
+<<<<<<< HEAD:Source/Falcor/Core/API/D3D12/D3D12Device.cpp
         mSupportedFeatures = getSupportedFeatures(mApiHandle);
 
         if (mDesc.enableDebugLayer)
@@ -332,6 +321,8 @@ namespace Falcor
             pInfoQueue->SetBreakOnID(D3D12_MESSAGE_ID_DEVICE_REMOVAL_PROCESS_AT_FAULT, true);
         }
 
+=======
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Framework/Source/API/D3D12/D3D12Device.cpp
         for (uint32_t i = 0; i < kQueueTypeCount; i++)
         {
             for (uint32_t j = 0; j < mDesc.cmdQueues[i]; j++)

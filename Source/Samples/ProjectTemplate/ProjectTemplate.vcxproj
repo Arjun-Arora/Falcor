@@ -25,7 +25,11 @@
     <ProjectGuid>{605856E4-34D4-40DF-B859-EEA3A7D52A7B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ProjectTemplate</RootNamespace>
+<<<<<<< HEAD:Source/Samples/ProjectTemplate/ProjectTemplate.vcxproj
     <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+=======
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+>>>>>>> parent of 5a12f298... Merge pull request #150 from NVIDIAGameWorks/rel-3.1.0:Samples/Core/ProjectTemplate/ProjectTemplate.vcxproj
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
